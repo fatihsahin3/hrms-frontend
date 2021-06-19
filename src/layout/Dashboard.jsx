@@ -9,6 +9,8 @@ import JobAdDetail from "../pages/JobAdDetail";
 import CandidateList from "../pages/CandidateList";
 import CandidateDetail from "../pages/CandidateDetail";
 import EmployerDetail from "../pages/EmployerDetail";
+import CreateJobAd from "../pages/CreateJobAd";
+import CreateCV from "../pages/CreateCV";
 
 export default function Dashboard() {
   return (
@@ -21,11 +23,13 @@ export default function Dashboard() {
           <Grid.Column width={12}>
             <Route exact path="/" component={JobAdList} />
             <Route exact path="/jobads" component={JobAdList} />
-            <Route path="/jobads/:id" component={JobAdDetail} />
+            <Route exact path="/jobads/:id" component={JobAdDetail} />
+            <Route exact path="/createJobAd" component={CreateJobAd} />
             <Route exact path="/employers" component={EmployerList} />
             <Route exact path="/employers/:id" component={EmployerDetail} />
             <Route exact path="/candidates" component={CandidateList} />
-            <Route path="/candidates/:id" component={CandidateDetail} />
+            <Route exact path="/candidates/:id" component={CandidateDetail} />
+            <Route exact path="/createCv" component={CreateCV} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

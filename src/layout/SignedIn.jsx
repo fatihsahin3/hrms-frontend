@@ -1,5 +1,6 @@
 import React from "react";
 import { Dropdown, Image, Menu } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 export default function SignedIn({ signOut }) {
   return (
@@ -13,6 +14,18 @@ export default function SignedIn({ signOut }) {
         <Dropdown>
           <Dropdown.Menu>
             <Dropdown.Item text="My Data" icon="info" />
+            <Dropdown.Item
+              as={Link}
+              to={"/createCV"}
+              text="Create CV"
+              icon="info"
+            />
+            <Dropdown.Item
+              as={Link}
+              to={"/createJobAd"}
+              text="Create Job Ad"
+              icon="info"
+            />
             <Dropdown.Item onClick={signOut} text="Sign Out" icon="sign-out" />
           </Dropdown.Menu>
         </Dropdown>
