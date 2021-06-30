@@ -11,10 +11,12 @@ import CandidateDetail from "../pages/CandidateDetail";
 import EmployerDetail from "../pages/EmployerDetail";
 import CreateJobAd from "../pages/CreateJobAd";
 import CreateCV from "../pages/CreateCV";
+import { ToastContainer } from "react-toastify";
 
 export default function Dashboard() {
   return (
     <div>
+      <ToastContainer position="bottom-right" />
       <Grid>
         <Grid.Row>
           <Grid.Column width={4}>

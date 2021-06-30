@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Icon, Menu, Table } from "semantic-ui-react";
+import { Button, Icon, Menu, Table } from "semantic-ui-react";
 import JobAdService from "../services/jobAdService";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import { applyJobAd } from "../store/actions/applicationActions";
+import { toast } from "react-toastify";
 
 export default function JobAdList() {
   const [jobAds, setjobAds] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     let jobAdService = new JobAdService();
     jobAdService.getJobAds().then((result) => setjobAds(result.data.data));
   }, []);
+
+  const handleApply = (jobAd) => {
+    dispatch(applyJobAd(jobAd));
+    toast.success("Application successful!");
+  };
 
   return (
     <div>
@@ -21,6 +30,7 @@ export default function JobAdList() {
             <Table.HeaderCell>Quantity</Table.HeaderCell>
             <Table.HeaderCell>Company Name</Table.HeaderCell>
             <Table.HeaderCell>Publish Date</Table.HeaderCell>
+            <Table.HeaderCell>Deadline</Table.HeaderCell>
             <Table.HeaderCell>Deadline</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -42,6 +52,9 @@ export default function JobAdList() {
                 {moment(new Date(Date.parse(jobAd.deadline))).format(
                   "DD-MM-YYYY"
                 )}
+              </Table.Cell>
+              <Table.Cell>
+                <Button onClick={() => handleApply(jobAd)}> Apply </Button>
               </Table.Cell>
             </Table.Row>
           ))}

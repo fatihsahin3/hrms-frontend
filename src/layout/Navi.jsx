@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
-import { Dropdown, Menu, Container } from "semantic-ui-react";
+import { Menu, Container } from "semantic-ui-react";
+import ApplicationSummary from "./ApplicationSummary";
 import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
+import { useSelector } from "react-redux";
 
 export default function Navi() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const history = useHistory();
+  const { applicationItems } = useSelector((state) => state.application);
 
   function handleSignOut(params) {
     setIsAuthenticated(false);
@@ -25,13 +28,7 @@ export default function Navi() {
           <Menu.Item name="messages" />
 
           <Menu.Menu position="right">
-            <Dropdown item text="Language">
-              <Dropdown.Menu>
-                <Dropdown.Item>English</Dropdown.Item>
-                <Dropdown.Item>Russian</Dropdown.Item>
-                <Dropdown.Item>Spanish</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            {applicationItems.length > 0 && <ApplicationSummary />}
 
             {isAuthenticated ? (
               <SignedIn signOut={handleSignOut} />

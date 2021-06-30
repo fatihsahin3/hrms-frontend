@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import * as Yup from "yup";
 import {
   Card,
   Dropdown,
   Button,
-  Form,
   Divider,
   Grid,
   Input,
@@ -62,6 +63,41 @@ export default function CreateJobAd() {
     value: city.id,
   }));
 
+  const formik = useFormik({
+    initialValues,
+    JobAdCreateSchema,
+  });
+
+  const initialValues = {
+    jobTitle: "",
+    city: "",
+    workingType: "",
+    workingTime: "",
+    minSalary: "",
+    maxSalary: "",
+    openPositions: "",
+    appDeadline: "",
+    jobDescription: "",
+  };
+
+  const JobAdCreateSchema = Yup.object().shape({
+    jobTitle: Yup.string().required("Job title is required!"),
+    city: Yup.string().required("City is required!"),
+    workingType: Yup.string().required("Working type is required!"),
+    workingTime: Yup.string().required("Working time is required!"),
+    minSalary: Yup.string().required("Minimum salary is required!"),
+    maxSalary: Yup.string().required("Maximum salary is required!"),
+    openPositions: Yup.string().required(
+      "Number of open positions is required!"
+    ),
+    appDeadline: Yup.string().required("Application Deadline is required!"),
+    description: Yup.string().required("Description is required!"),
+  });
+
+  const onSubmit = (values) => {
+    values.employerId = 4;
+  };
+
   return (
     <div>
       <Card fluid>
@@ -73,6 +109,7 @@ export default function CreateJobAd() {
             <Form.Field>
               <label>Job Title</label>
               <Dropdown
+                name="jobTitle"
                 placeholder="Select a Job Title"
                 fluid
                 selection
@@ -82,6 +119,7 @@ export default function CreateJobAd() {
             <Form.Field>
               <label>City</label>
               <Dropdown
+                name="city"
                 placeholder="Select a City"
                 fluid
                 selection
@@ -91,6 +129,7 @@ export default function CreateJobAd() {
             <Form.Field>
               <label>Working Type</label>
               <Dropdown
+                name="workingType"
                 placeholder="Select a Working Type"
                 fluid
                 selection
@@ -100,6 +139,7 @@ export default function CreateJobAd() {
             <Form.Field>
               <label>Working Time</label>
               <Dropdown
+                name="workingTime"
                 placeholder="Select a Working Time"
                 fluid
                 selection
@@ -112,19 +152,19 @@ export default function CreateJobAd() {
                 <Grid.Column width={8}>
                   <label style={{ fontWeight: "bold" }}>Mimimum Salary</label>
                   <Input
+                    name="minSalary"
                     style={{ width: "100%" }}
                     type="number"
                     placeholder="Minimum Salary"
-                    name="minSalary"
                   ></Input>
                 </Grid.Column>
                 <Grid.Column width={8}>
                   <label style={{ fontWeight: "bold" }}>Maximum Salary</label>
                   <Input
+                    name="maxSalary"
                     style={{ width: "100%" }}
                     type="number"
                     placeholder="Maximum Salary"
-                    name="maxSalary"
                   ></Input>
                 </Grid.Column>
               </Grid>
@@ -135,9 +175,9 @@ export default function CreateJobAd() {
                 <Grid.Column width={8}>
                   <label style={{ fontWeight: "bold" }}>Open Positions</label>
                   <Input
-                    style={{ width: "100%" }}
-                    id="openPositions"
                     name="openPositions"
+                    id="openPositions"
+                    style={{ width: "100%" }}
                     type="number"
                     placeholder="Open Positions"
                   />
@@ -147,9 +187,9 @@ export default function CreateJobAd() {
                     Application Deadline
                   </label>
                   <Input
+                    name="appDeadline"
                     style={{ width: "100%" }}
                     type="date"
-                    name="deadline"
                     placeholder="Application Deadline"
                   />
                 </Grid.Column>
@@ -160,9 +200,9 @@ export default function CreateJobAd() {
             <Form.Field>
               <label>Job Description</label>
               <TextArea
+                name="jobDescription"
                 placeholder="Job Description"
                 style={{ minHeight: 100 }}
-                name="jobDescription"
               />
             </Form.Field>
             {/* Block Comments */}
