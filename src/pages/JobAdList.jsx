@@ -3,23 +3,28 @@ import { Link } from "react-router-dom";
 import { Button, Icon, Menu, Table } from "semantic-ui-react";
 import JobAdService from "../services/jobAdService";
 import moment from "moment";
-import { useDispatch } from "react-redux";
-import { applyJobAd } from "../store/actions/applicationActions";
-import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 export default function JobAdList() {
   const [jobAds, setjobAds] = useState([]);
-  const dispatch = useDispatch();
+  const { applications } = useSelector((state) => state.applications);
 
   useEffect(() => {
     let jobAdService = new JobAdService();
     jobAdService.getJobAds().then((result) => setjobAds(result.data.data));
   }, []);
 
-  const handleApply = (jobAd) => {
-    dispatch(applyJobAd(jobAd));
-    toast.success("Application successful!");
-  };
+  function checkIfJobApplied(jobAd) {
+    for (let index = 0; index < applications.length; index++) {
+      const element = applications[index];
+
+      if (element.jobAd.id === jobAd.id) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   return (
     <div>
@@ -38,9 +43,7 @@ export default function JobAdList() {
         <Table.Body>
           {jobAds.map((jobAd) => (
             <Table.Row key={jobAd.id}>
-              <Table.Cell>
-                <Link to={`/jobads/${jobAd.id}`}>{jobAd.jobTitle}</Link>
-              </Table.Cell>
+              <Table.Cell>{jobAd.jobTitle}</Table.Cell>
               <Table.Cell>{jobAd.openPositionQty}</Table.Cell>
               <Table.Cell>{jobAd.companyName}</Table.Cell>
               <Table.Cell>
@@ -54,7 +57,17 @@ export default function JobAdList() {
                 )}
               </Table.Cell>
               <Table.Cell>
-                <Button onClick={() => handleApply(jobAd)}> Apply </Button>
+                <Link to={`/jobads/${jobAd.id}`}>
+                  {checkIfJobApplied(jobAd) === false ? (
+                    <Button basic color="green">
+                      Apply
+                    </Button>
+                  ) : (
+                    <Button basic color="red">
+                      Withdraw
+                    </Button>
+                  )}
+                </Link>
               </Table.Cell>
             </Table.Row>
           ))}

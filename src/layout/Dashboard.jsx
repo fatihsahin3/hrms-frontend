@@ -26,12 +26,12 @@ export default function Dashboard() {
             <Route exact path="/" component={JobAdList} />
             <Route exact path="/jobads" component={JobAdList} />
             <Route exact path="/jobads/:id" component={JobAdDetail} />
-            <Route exact path="/createJobAd" component={CreateJobAd} />
+            <Route exact path="/jobad/create" component={CreateJobAd} />
             <Route exact path="/employers" component={EmployerList} />
             <Route exact path="/employers/:id" component={EmployerDetail} />
             <Route exact path="/candidates" component={CandidateList} />
             <Route exact path="/candidates/:id" component={CandidateDetail} />
-            <Route exact path="/createCv" component={CreateCV} />
+            <Route exact path="/cv/create" component={CreateCV} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

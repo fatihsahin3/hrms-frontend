@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 export default function Navi() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const history = useHistory();
-  const { applicationItems } = useSelector((state) => state.application);
+  const { applications } = useSelector((state) => state.applications);
 
   function handleSignOut(params) {
     setIsAuthenticated(false);
@@ -28,7 +28,7 @@ export default function Navi() {
           <Menu.Item name="messages" />
 
           <Menu.Menu position="right">
-            {applicationItems.length > 0 && <ApplicationSummary />}
+            {applications.length > 0 && <ApplicationSummary />}
 
             {isAuthenticated ? (
               <SignedIn signOut={handleSignOut} />

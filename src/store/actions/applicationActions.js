@@ -8,7 +8,7 @@ export function applyJobAd(jobAd) {
   };
 }
 
-export function withdrawAppplication(jobAd) {
+export function withdrawApplication(jobAd) {
   return {
     type: WITHDRAW_APPLICATION,
     payload: jobAd,

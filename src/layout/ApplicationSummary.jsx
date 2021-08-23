@@ -3,14 +3,15 @@ import { useSelector } from "react-redux";
 import { Dropdown } from "semantic-ui-react";
 
 export default function ApplicationSummary() {
-  const { applicationItems } = useSelector((state) => state.application);
+  const { applications } = useSelector((state) => state.applications);
+
   return (
     <div>
       <Dropdown item text="Applications">
         <Dropdown.Menu>
-          {applicationItems.map((applicationItem) => (
-            <Dropdown.Item key={applicationItem.jobAd.id}>
-              {applicationItem.jobAd.jobTitle}
+          {applications.map((application) => (
+            <Dropdown.Item key={application.jobAd.id}>
+              {application.jobAd.jobTitle}
             </Dropdown.Item>
           ))}
         </Dropdown.Menu>
