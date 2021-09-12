@@ -3,13 +3,13 @@ import { useParams } from "react-router";
 import { Card, Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 
-import JobAdService from "../services/jobAdService";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import {
   applyJobAd,
   withdrawApplication,
 } from "../store/actions/applicationActions";
+import JobAdService from "../services/jobAdService";
 
 export default function JobAdDetail() {
   let { id } = useParams();

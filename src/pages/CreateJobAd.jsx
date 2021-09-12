@@ -9,11 +9,13 @@ import {
   FormField,
   TextArea,
 } from "semantic-ui-react";
+import JobAdService from "../services/jobAdService";
 import CityService from "../services/cityService";
 import JobTitleService from "../services/jobTitleService";
 import WorkingTimeService from "../services/workingTimeService";
 import WorkingTypeService from "../services/workingTypeService";
-import MyCustomTextInput from "../utilities/customFormControls/MyCustomTextInput";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 
 export default function CreateJobAd() {
   const [jobTitles, setJobTitles] = useState([]);
@@ -40,11 +42,13 @@ export default function CreateJobAd() {
     console.log(jobTitleOption);
   }, []);
 
+  const history = useHistory();
+
   const initialValues = {
-    jobTitle: "",
-    city: "Istanbul",
-    workingType: "",
-    workingTime: "",
+    jobTitle: { id: "" },
+    city: { id: "" },
+    workingType: { id: "" },
+    workingTime: { id: "" },
     minSalary: "",
     maxSalary: "",
     openPositions: "",
@@ -53,7 +57,7 @@ export default function CreateJobAd() {
   };
 
   const jobAdCreateSchema = Yup.object().shape({
-    jobTitle: Yup.string().required("Job title is required!"),
+    /*jobTitle: Yup.string().required("Job title is required!"),
     city: Yup.string().required("City is required!"),
     workingType: Yup.string().required("Working type is required!"),
     workingTime: Yup.string().required("Working time is required!"),
@@ -63,7 +67,7 @@ export default function CreateJobAd() {
       "Number of open positions is required!"
     ),
     appDeadline: Yup.string().required("Application Deadline is required!"),
-    description: Yup.string().required("Description is required!"),
+    jobDescription: Yup.string().required("Description is required!"),*/
   });
 
   const jobTitleOption = jobTitles.map((jobTitle, index) => ({
@@ -95,9 +99,16 @@ export default function CreateJobAd() {
     jobAdCreateSchema,
   });
 
-  const onSubmit = (values) => {
-    values.employerId = 4;
-  };
+  function handleSubmit(values) {
+    let jobAdService = new JobAdService();
+    jobAdService.addJobAd(values).then((result) => {
+      if (result.data.success === true) {
+        toast.success(result.data.message);
+        console.log(result);
+      } else {
+      }
+    });
+  }
 
   return (
     <div>
@@ -109,31 +120,73 @@ export default function CreateJobAd() {
             initialValues={initialValues}
             validationSchema={jobAdCreateSchema}
             onSubmit={(values) => {
-              console.log(values);
+              handleSubmit(values);
             }}
           >
-            <Form className="ui form">
-              <FormField>
-                <label>Job Title</label>
-                <Dropdown
-                  name="jobTitle"
-                  placeholder="Select a Job Title"
-                  fluid
-                  selection
-                  options={jobTitleOption}
-                />
-              </FormField>
-              <FormField>
-                <label>City</label>
-                <Dropdown
-                  name="city"
-                  placeholder="Select a City"
-                  fluid
-                  selection
-                  options={cityOption}
-                />
-              </FormField>
-              <FormField>
+            {({ values, setFieldValue }) => (
+              <div>
+                <pre>{JSON.stringify(values, undefined, 2)}</pre>
+
+                <Form className="ui form">
+                  <FormField>
+                    <label>Job Title</label>
+                    <Dropdown
+                      selection
+                      placeholder="Select a Job Title"
+                      name="jobTitle"
+                      fluid
+                      options={jobTitleOption}
+                      value={values.jobTitle.id}
+                      onChange={(_, { value }) =>
+                        setFieldValue("jobTitle.id", value)
+                      }
+                    />
+                  </FormField>
+                  <FormField>
+                    <label>City</label>
+                    <Dropdown
+                      selection
+                      placeholder="Select a City"
+                      name="city"
+                      fluid
+                      options={cityOption}
+                      value={values.city.id}
+                      onChange={(_, { value }) =>
+                        setFieldValue("city.id", value)
+                      }
+                    />
+                  </FormField>
+                  <FormField>
+                    <label>Working Type</label>
+                    <Dropdown
+                      selection
+                      placeholder="Select a Working Type"
+                      name="workingType"
+                      fluid
+                      options={workingTypeOption}
+                      value={values.workingType.id}
+                      onChange={(_, { value }) =>
+                        setFieldValue("workingType.id", value)
+                      }
+                    />
+                  </FormField>
+
+                  <FormField>
+                    <label>Working Time</label>
+                    <Dropdown
+                      selection
+                      placeholder="Select a Working Time"
+                      name="workingTime"
+                      fluid
+                      options={workingTimeOption}
+                      value={values.workingTime.id}
+                      onChange={(_, { value }) =>
+                        setFieldValue("workingTime.id", value)
+                      }
+                    />
+                  </FormField>
+
+                  {/* <FormField>
                 <label>Working Type</label>
                 <Dropdown
                   name="workingType"
@@ -175,16 +228,6 @@ export default function CreateJobAd() {
                 />
               </FormField>
               <FormField>
-                <label>City</label>
-                <Dropdown
-                  name="city"
-                  placeholder="Select a City"
-                  fluid
-                  selection
-                  options={cityOption}
-                />
-              </FormField>
-              <FormField>
                 <label>Application Deadline</label>
                 <input
                   name="appDeadline"
@@ -200,130 +243,19 @@ export default function CreateJobAd() {
                   placeholder="Job Description"
                   style={{ minHeight: 100 }}
                 />
-              </FormField>
-              <Button color="green" type="submit">
-                Submit
-              </Button>
-            </Form>
+              </FormField> */}
+
+                  <FormField>
+                    <Button color="green" type="submit">
+                      Submit
+                    </Button>
+                  </FormField>
+                </Form>
+              </div>
+            )}
           </Formik>
         </Card.Content>
       </Card>
     </div>
   );
 }
-
-// return (
-//   <div>
-//     <Card fluid>
-//       <Card.Content>
-//         <Card.Header>Create A New Job Ad</Card.Header>
-
-//         <Divider inverted />
-//         <Form>
-//           <Form.Field>
-//             <label>Job Title</label>
-//             <Dropdown
-//               name="jobTitle"
-//               placeholder="Select a Job Title"
-//               fluid
-//               selection
-//               options={jobTitleOption}
-//             />
-//           </Form.Field>
-//           <Form.Field>
-//             <label>City</label>
-//             <Dropdown
-//               name="city"
-//               placeholder="Select a City"
-//               fluid
-//               selection
-//               options={cityOption}
-//             />
-//           </Form.Field>
-//           <Form.Field>
-//             <label>Working Type</label>
-//             <Dropdown
-//               name="workingType"
-//               placeholder="Select a Working Type"
-//               fluid
-//               selection
-//               options={workingTypeOption}
-//             />
-//           </Form.Field>
-//           <Form.Field>
-//             <label>Working Time</label>
-//             <Dropdown
-//               name="workingTime"
-//               placeholder="Select a Working Time"
-//               fluid
-//               selection
-//               options={workingTimeOption}
-//             />
-//           </Form.Field>
-//           {/* Block Comments */}
-//           <Form.Field>
-//             <Grid stackable>
-//               <Grid.Column width={8}>
-//                 <label style={{ fontWeight: "bold" }}>Mimimum Salary</label>
-//                 <Input
-//                   name="minSalary"
-//                   style={{ width: "100%" }}
-//                   type="number"
-//                   placeholder="Minimum Salary"
-//                 ></Input>
-//               </Grid.Column>
-//               <Grid.Column width={8}>
-//                 <label style={{ fontWeight: "bold" }}>Maximum Salary</label>
-//                 <Input
-//                   name="maxSalary"
-//                   style={{ width: "100%" }}
-//                   type="number"
-//                   placeholder="Maximum Salary"
-//                 ></Input>
-//               </Grid.Column>
-//             </Grid>
-//           </Form.Field>
-//           {/* Block Comments */}
-//           <Form.Field>
-//             <Grid stackable>
-//               <Grid.Column width={8}>
-//                 <label style={{ fontWeight: "bold" }}>Open Positions</label>
-//                 <Input
-//                   name="openPositions"
-//                   id="openPositions"
-//                   style={{ width: "100%" }}
-//                   type="number"
-//                   placeholder="Open Positions"
-//                 />
-//               </Grid.Column>
-//               <Grid.Column width={8}>
-//                 <label style={{ fontWeight: "bold" }}>
-//                   Application Deadline
-//                 </label>
-//                 <Input
-//                   name="appDeadline"
-//                   style={{ width: "100%" }}
-//                   type="date"
-//                   placeholder="Application Deadline"
-//                 />
-//               </Grid.Column>
-//             </Grid>
-//           </Form.Field>
-//           {/* Block Comments */}
-
-//           <Form.Field>
-//             <label>Job Description</label>
-//             <TextArea
-//               name="jobDescription"
-//               placeholder="Job Description"
-//               style={{ minHeight: 100 }}
-//             />
-//           </Form.Field>
-//           {/* Block Comments */}
-
-//           <Button type="submit">Submit</Button>
-//         </Form>
-//       </Card.Content>
-//     </Card>
-//   </div>
-// );
